@@ -1,8 +1,6 @@
-spring:
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
+server:
+  address: localhost
+  port: 8088
 
 sdw:
   id-generator-mode: SHORT
