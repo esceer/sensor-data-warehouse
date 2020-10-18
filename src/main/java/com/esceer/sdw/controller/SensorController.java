@@ -44,6 +44,13 @@ public class SensorController {
         return ResponseEntity.ok(convert(sensor));
     }
 
+    @GetMapping("/name/{name}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<SensorDto> getSensorByName(@PathVariable("name") String name) {
+        Sensor sensor = service.getSensorByName(name);
+        return ResponseEntity.ok(convert(sensor));
+    }
+
     @PutMapping("/{id}/state/{state}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SensorDto> updateSensor(@PathVariable("id") String id, @PathVariable("state") Object newState) {

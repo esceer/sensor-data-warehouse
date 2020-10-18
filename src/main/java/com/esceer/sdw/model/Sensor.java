@@ -1,11 +1,15 @@
 package com.esceer.sdw.model;
 
 import java.util.Objects;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 public class Sensor {
 
+    @MongoId
     private String id;
 
+    @Indexed(unique = true)
     private String name;
     private Object state;
 

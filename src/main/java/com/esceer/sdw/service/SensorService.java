@@ -9,6 +9,8 @@ public interface SensorService {
 
     Sensor getSensorById(String id);
 
+    Sensor getSensorByName(String name);
+
     Sensor createSensor(String name, Object state);
 
     Sensor updateSensorState(String id, Object newState);

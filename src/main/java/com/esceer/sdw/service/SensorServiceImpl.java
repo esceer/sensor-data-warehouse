@@ -28,9 +28,18 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
+    public Sensor getSensorByName(String name) {
+        return repository.findByName(name).orElseThrow();
+    }
+
+    @Override
     public Sensor createSensor(String name, Object state) {
-        Sensor sensor = new Sensor(idFactory.generateId(), name, state);
-        return repository.insert(sensor);
+        if (repository.findByName(name).isPresent()) {
+            throw new IllegalArgumentException("Sensor '{}' already exists");
+        } else {
+            Sensor sensor = new Sensor(idFactory.generateId(), name, state);
+            return repository.insert(sensor);
+        }
     }
 
     @Override
