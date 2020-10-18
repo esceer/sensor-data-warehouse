@@ -3,6 +3,8 @@ package com.esceer.sdw.service;
 import com.esceer.sdw.model.Sensor;
 import com.esceer.sdw.repository.SensorRepository;
 import com.esceer.sdw.service.identifier.IdFactory;
+import java.time.Clock;
+import java.time.ZonedDateTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -37,21 +39,22 @@ public class SensorServiceImpl implements SensorService {
         if (repository.findByName(name).isPresent()) {
             throw new IllegalArgumentException("Sensor '{}' already exists");
         } else {
-            Sensor sensor = new Sensor(idFactory.generateId(), name, state);
+            var sensor = new Sensor(idFactory.generateId(), name, state, ZonedDateTime.now(Clock.systemUTC()));
             return repository.insert(sensor);
         }
     }
 
     @Override
     public Sensor updateSensorState(String id, Object newState) {
-        Sensor sensor = getSensorById(id);
+        var sensor = getSensorById(id);
         sensor.setState(newState);
+        sensor.setTimestamp(ZonedDateTime.now(Clock.systemUTC()));
         return repository.save(sensor);
     }
 
     @Override
     public Sensor deleteSensor(String id) {
-        Sensor sensor = getSensorById(id);
+        var sensor = getSensorById(id);
         repository.delete(sensor);
         return sensor;
     }

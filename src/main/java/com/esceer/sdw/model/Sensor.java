@@ -1,5 +1,6 @@
 package com.esceer.sdw.model;
 
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -12,14 +13,16 @@ public class Sensor {
     @Indexed(unique = true)
     private String name;
     private Object state;
+    private ZonedDateTime timestamp;
 
     public Sensor() {
     }
 
-    public Sensor(String id, String name, Object state) {
+    public Sensor(String id, String name, Object state, ZonedDateTime timestamp) {
         this.id = id;
         this.name = name;
         this.state = state;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
@@ -46,6 +49,14 @@ public class Sensor {
         this.state = state;
     }
 
+    public ZonedDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(ZonedDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -55,7 +66,10 @@ public class Sensor {
             return false;
         }
         Sensor sensor = (Sensor) o;
-        return Objects.equals(id, sensor.id);
+        return Objects.equals(id, sensor.id) &&
+            Objects.equals(name, sensor.name) &&
+            Objects.equals(state, sensor.state) &&
+            Objects.equals(timestamp, sensor.timestamp);
     }
 
     @Override
@@ -66,9 +80,10 @@ public class Sensor {
     @Override
     public String toString() {
         return "Sensor{" +
-            "id=" + id +
+            "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", state=" + state +
+            ", timestamp=" + timestamp +
             '}';
     }
 }

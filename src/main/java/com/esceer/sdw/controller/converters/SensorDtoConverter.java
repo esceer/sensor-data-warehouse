@@ -6,7 +6,7 @@ import com.esceer.sdw.model.SensorDto;
 public final class SensorDtoConverter {
 
     public static SensorDto convert(Sensor sensor) {
-        return new SensorDto(sensor.getId(), sensor.getName(), sensor.getState());
+        return new SensorDto(sensor.getId(), sensor.getName(), sensor.getState(), sensor.getTimestamp());
     }
 
     private SensorDtoConverter() {

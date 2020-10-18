@@ -2,7 +2,7 @@ package com.esceer.sdw.controller;
 
 import static com.esceer.sdw.controller.converters.SensorDtoConverter.convert;
 
-import com.esceer.sdw.model.Sensor;
+import com.esceer.sdw.controller.converters.SensorDtoConverter;
 import com.esceer.sdw.model.SensorDto;
 import com.esceer.sdw.service.SensorService;
 import java.util.List;
@@ -31,8 +31,8 @@ public class SensorController {
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<SensorDto>> getAllSensors() {
-        List<SensorDto> sensorDtoList = service.getAll().stream()
-            .map(sensor -> new SensorDto(sensor.getId(), sensor.getName(), sensor.getState()))
+        var sensorDtoList = service.getAll().stream()
+            .map(SensorDtoConverter::convert)
             .collect(Collectors.toList());
         return ResponseEntity.ok(sensorDtoList);
     }
@@ -40,35 +40,35 @@ public class SensorController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SensorDto> getSensor(@PathVariable("id") String id) {
-        Sensor sensor = service.getSensorById(id);
+        var sensor = service.getSensorById(id);
         return ResponseEntity.ok(convert(sensor));
     }
 
     @GetMapping("/name/{name}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SensorDto> getSensorByName(@PathVariable("name") String name) {
-        Sensor sensor = service.getSensorByName(name);
+        var sensor = service.getSensorByName(name);
         return ResponseEntity.ok(convert(sensor));
     }
 
     @PutMapping("/{id}/state/{state}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SensorDto> updateSensor(@PathVariable("id") String id, @PathVariable("state") Object newState) {
-        Sensor sensor = service.updateSensorState(id, newState);
+        var sensor = service.updateSensorState(id, newState);
         return ResponseEntity.ok(convert(sensor));
     }
 
     @PostMapping("/{name}/state/{state}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SensorDto> createSensor(@PathVariable("name") String name, @PathVariable("state") Object state) {
-        Sensor sensor = service.createSensor(name, state);
+        var sensor = service.createSensor(name, state);
         return new ResponseEntity<>(convert(sensor), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SensorDto> deleteSensor(@PathVariable("id") String id) {
-        Sensor sensor = service.deleteSensor(id);
+        var sensor = service.deleteSensor(id);
         return ResponseEntity.ok(convert(sensor));
     }
 }

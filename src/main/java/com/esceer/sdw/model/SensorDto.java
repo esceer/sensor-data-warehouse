@@ -1,5 +1,6 @@
 package com.esceer.sdw.model;
 
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class SensorDto {
@@ -7,11 +8,13 @@ public class SensorDto {
     private final String id;
     private final String name;
     private final Object state;
+    private final ZonedDateTime timestamp;
 
-    public SensorDto(String id, String name, Object state) {
+    public SensorDto(String id, String name, Object state, ZonedDateTime timestamp) {
         this.id = id;
         this.name = name;
         this.state = state;
+        this.timestamp = timestamp;
     }
 
     public String getId() {
@@ -26,6 +29,10 @@ public class SensorDto {
         return state;
     }
 
+    public ZonedDateTime getTimestamp() {
+        return timestamp;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -35,7 +42,10 @@ public class SensorDto {
             return false;
         }
         SensorDto sensorDto = (SensorDto) o;
-        return Objects.equals(id, sensorDto.id);
+        return Objects.equals(id, sensorDto.id) &&
+            Objects.equals(name, sensorDto.name) &&
+            Objects.equals(state, sensorDto.state) &&
+            Objects.equals(timestamp, sensorDto.timestamp);
     }
 
     @Override
@@ -46,9 +56,10 @@ public class SensorDto {
     @Override
     public String toString() {
         return "SensorDto{" +
-            "id=" + id +
+            "id='" + id + '\'' +
             ", name='" + name + '\'' +
             ", state=" + state +
+            ", timestamp=" + timestamp +
             '}';
     }
 }
