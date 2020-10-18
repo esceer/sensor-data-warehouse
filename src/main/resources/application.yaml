@@ -1,6 +1,6 @@
 server:
   address: localhost
-  port: 8088
+  port: 8080
 
 sdw:
   id-generator-mode: SHORT
