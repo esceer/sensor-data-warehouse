@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+    validationQuery: SELECT 1
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect

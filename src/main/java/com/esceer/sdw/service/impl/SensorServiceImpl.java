@@ -1,23 +1,23 @@
-package com.esceer.sdw.service;
+package com.esceer.sdw.service.impl;
 
 import com.esceer.sdw.model.Sensor;
 import com.esceer.sdw.repository.SensorRepository;
+import com.esceer.sdw.service.SensorService;
 import com.esceer.sdw.service.identifier.IdFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.time.Clock;
 import java.time.ZonedDateTime;
 import java.util.List;
-import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SensorServiceImpl implements SensorService {
 
     private final SensorRepository repository;
     private final IdFactory idFactory;
-
-    public SensorServiceImpl(SensorRepository repository, IdFactory idFactory) {
-        this.repository = repository;
-        this.idFactory = idFactory;
-    }
 
     @Override
     public List<Sensor> getAll() {
@@ -25,18 +25,19 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public Sensor getSensorById(String id) {
-        return repository.findById(id).orElseThrow();
+    public Optional<Sensor> getById(String id) {
+        return repository.findById(id);
     }
 
     @Override
-    public Sensor getSensorByName(String name) {
-        return repository.findByName(name).orElseThrow();
+    public Optional<Sensor> getByName(String name) {
+        return repository.findByName(name);
     }
 
+
     @Override
-    public Sensor createSensor(String name, Object state) {
-        if (repository.findByName(name).isPresent()) {
+    public Sensor create(String name, Object state) {
+        if (repository.existsByName(name)) {
             throw new IllegalArgumentException("Sensor '{}' already exists");
         } else {
             var sensor = new Sensor(idFactory.generateId(), name, state, ZonedDateTime.now(Clock.systemUTC()));
@@ -45,17 +46,17 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public Sensor updateSensorState(String id, Object newState) {
-        var sensor = getSensorById(id);
+    public Sensor updateState(String id, Object newState) {
+        var sensor = getById(id).orElseThrow();
         sensor.setState(newState);
         sensor.setTimestamp(ZonedDateTime.now(Clock.systemUTC()));
         return repository.save(sensor);
     }
 
     @Override
-    public Sensor deleteSensor(String id) {
-        var sensor = getSensorById(id);
-        repository.delete(sensor);
+    public Optional<Sensor> delete(String id) {
+        var sensor = getById(id);
+        sensor.ifPresent(repository::delete);
         return sensor;
     }
 }

@@ -1,6 +1,6 @@
 FROM openjdk:11-jre-slim
 
-COPY ./target/sensor-data-warehouse-1.2.0.jar /usr/libexec/sdw/sensor-data-warehouse.jar
+COPY ./target/sensor-data-warehouse-1.3.0.jar /usr/libexec/sdw/sensor-data-warehouse.jar
 COPY src/main/docker /etc/sdw
 
 RUN chmod +x /etc/sdw/startup.sh

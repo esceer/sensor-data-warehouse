@@ -5,8 +5,11 @@ import static com.esceer.sdw.controller.converters.SensorDtoConverter.convert;
 import com.esceer.sdw.controller.converters.SensorDtoConverter;
 import com.esceer.sdw.model.SensorDto;
 import com.esceer.sdw.service.SensorService;
+
 import java.util.List;
 import java.util.stream.Collectors;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,13 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/sensors")
+@RequiredArgsConstructor
 public class SensorController {
 
     private final SensorService service;
-
-    public SensorController(SensorService service) {
-        this.service = service;
-    }
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)
@@ -40,35 +40,35 @@ public class SensorController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SensorDto> getSensor(@PathVariable("id") String id) {
-        var sensor = service.getSensorById(id);
+        var sensor = service.getById(id).orElseThrow();
         return ResponseEntity.ok(convert(sensor));
     }
 
     @GetMapping("/name/{name}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SensorDto> getSensorByName(@PathVariable("name") String name) {
-        var sensor = service.getSensorByName(name);
+        var sensor = service.getByName(name).orElseThrow();
         return ResponseEntity.ok(convert(sensor));
     }
 
     @PutMapping("/{id}/state/{state}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SensorDto> updateSensor(@PathVariable("id") String id, @PathVariable("state") Object newState) {
-        var sensor = service.updateSensorState(id, newState);
+        var sensor = service.updateState(id, newState);
         return ResponseEntity.ok(convert(sensor));
     }
 
     @PostMapping("/{name}/state/{state}")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SensorDto> createSensor(@PathVariable("name") String name, @PathVariable("state") Object state) {
-        var sensor = service.createSensor(name, state);
+        var sensor = service.create(name, state);
         return new ResponseEntity<>(convert(sensor), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<SensorDto> deleteSensor(@PathVariable("id") String id) {
-        var sensor = service.deleteSensor(id);
+        var sensor = service.delete(id).orElseThrow();
         return ResponseEntity.ok(convert(sensor));
     }
 }
