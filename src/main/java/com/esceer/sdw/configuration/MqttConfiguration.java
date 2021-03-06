@@ -1,11 +1,14 @@
 package com.esceer.sdw.configuration;
 
 import com.esceer.sdw.mqtt.SensorMqttListener;
+import com.esceer.sdw.service.identifier.IdFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.eclipse.paho.client.mqttv3.IMqttClient;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,9 +26,13 @@ public class MqttConfiguration {
     @Value("${mqtt.topic}")
     private String topic;
 
-    @Bean
+    @Autowired
+    private IdFactory idFactory;
+
+    @Bean(destroyMethod = "disconnect")
     public IMqttClient mqttClient(MqttConnectOptions options, SensorMqttListener listener) throws MqttException {
-        var mqttClient = new MqttClient(uri, clientId);
+        var mqttClient = new MqttClient(uri, String.format("%s-%s", clientId, idFactory.generateId()), new MemoryPersistence());
+        mqttClient.setTimeToWait(10000);
 
         mqttClient.connect(options);
         log.info("Client '" + clientId + "' connected to MQTT broker.");
@@ -41,7 +48,7 @@ public class MqttConfiguration {
         MqttConnectOptions options = new MqttConnectOptions();
         options.setAutomaticReconnect(true);
         options.setCleanSession(true);
-        options.setConnectionTimeout(10);
+        options.setMqttVersion(MqttConnectOptions.MQTT_VERSION_3_1_1);
         return options;
     }
 }

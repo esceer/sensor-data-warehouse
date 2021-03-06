@@ -15,3 +15,6 @@ This is a simple Spring Data project which stores and produces sensor data via m
 * Open the following URL in browser:
   * http://\<host\>:\<port\>/swagger-ui/
 
+#### MQTT
+* Application is subscribed to the following mqtt topic(s):
+  * ehome/sensors
