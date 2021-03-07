@@ -18,5 +18,5 @@ mqtt:
   topic: ehome/sensors
   notification:
     separator:
-      inner-message-border: "#"
+      data-pack: "#"
       key-value: ":"

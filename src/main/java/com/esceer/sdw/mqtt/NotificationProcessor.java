@@ -10,20 +10,20 @@ import java.util.regex.Pattern;
 @Component
 public class NotificationProcessor {
 
-    private final String innerMessageBorderSeparator;
+    private final String dataPackSeparator;
     private final Pattern keyValuePattern;
     private final SensorUpdateEventService sensorUpdateEventService;
 
-    public NotificationProcessor(@Value("${mqtt.notification.separator.inner-message-border}") String innerMessageBorderSeparator,
+    public NotificationProcessor(@Value("${mqtt.notification.separator.data-pack}") String dataPackSeparator,
                                  @Value("${mqtt.notification.separator.key-value}") String keyValueSeparator,
                                  SensorUpdateEventService sensorUpdateEventService) {
-        this.innerMessageBorderSeparator = innerMessageBorderSeparator;
+        this.dataPackSeparator = dataPackSeparator;
         this.keyValuePattern = Pattern.compile("^([^" + keyValueSeparator + "]+)" + keyValueSeparator + "(.+)$");
         this.sensorUpdateEventService = sensorUpdateEventService;
     }
 
     public void processNotification(String notification) {
-        Arrays.stream(notification.split(innerMessageBorderSeparator)).forEach(keyValueUpdate -> {
+        Arrays.stream(notification.split(dataPackSeparator)).forEach(keyValueUpdate -> {
             var matcher = keyValuePattern.matcher(keyValueUpdate);
             if (matcher.matches()) {
                 var key = matcher.group(1);
