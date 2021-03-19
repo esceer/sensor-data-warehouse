@@ -12,7 +12,12 @@ import org.springframework.context.annotation.Configuration;
 public class LoggingAspect {
 
     @Before("execution(* com.esceer.sdw.controller.*.*(..))")
-    public void logBeforeRestCalls(JoinPoint joinPoint) {
-        log.info("Incoming rest call: {}", joinPoint);
+    public void logWhenReceivingRestCall(JoinPoint joinPoint) {
+        log.info("Incoming rest call: {}, parameter(s): {}", joinPoint.toShortString(), joinPoint.getArgs());
+    }
+
+    @Before("execution(* com.esceer.sdw.mqtt.SensorMqttListener.messageArrived(..))")
+    public void logWhenReceivingMqttMessage(JoinPoint joinPoint) {
+        log.info("Incoming mqtt message: {} {}", joinPoint.getArgs());
     }
 }

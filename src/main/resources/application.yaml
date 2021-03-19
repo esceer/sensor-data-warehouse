@@ -15,8 +15,7 @@ sdw:
 mqtt:
   client-id: sensor-data-warehouse
   uri: tcp://127.0.0.1:1883
-  topic: ehome/sensors
+  topic: ehome/sensors/+/+
   notification:
-    separator:
-      data-pack: "#"
-      key-value: ":"
+    regex-matcher:
+      sensor-name: ^ehome/sensors/(.+/.+)$

@@ -14,9 +14,9 @@ public class SensorMqttListener implements IMqttMessageListener {
     private final NotificationProcessor notificationProcessor;
 
     @Override
-    public void messageArrived(String s, MqttMessage mqttMessage) {
+    public void messageArrived(String topic, MqttMessage mqttMessage) {
         var sensorUpdateNotification = new String(mqttMessage.getPayload(), UTF_8);
-        notificationProcessor.processNotification(sensorUpdateNotification);
+        notificationProcessor.processNotification(topic, sensorUpdateNotification);
     }
 }
 
