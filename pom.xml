@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.esceer</groupId>
     <artifactId>sensor-data-warehouse</artifactId>
-    <version>1.3.0</version>
+    <version>1.4.0</version>
     <name>sensor-data-warehouse</name>
     <description>Home automation project for storing sensor data.</description>
 
