@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.regex.Pattern;
 
+import static java.lang.String.valueOf;
+
 @Component
 public class NotificationProcessor {
 
@@ -22,7 +24,7 @@ public class NotificationProcessor {
         var matcher = topicPattern.matcher(topic);
         if (matcher.matches()) {
             var sensorName = matcher.group(1);
-            sensorUpdateEventService.handleSensorUpdateEvent(sensorName, sensorValue);
+            sensorUpdateEventService.handleSensorUpdateEvent(sensorName, valueOf(sensorValue).trim());
         }
     }
 }
